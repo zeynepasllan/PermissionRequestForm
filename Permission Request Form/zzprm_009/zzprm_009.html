@@ -1,0 +1,209 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZZPRM_009</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZZPRM_009</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZZPRM_009<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+report zzprm_009.<br />
+tables: zzprm_t005,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzprm_t006,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzprm_t007,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zzprm_t008.<br />
+data: gs_log7 type zzprm_t007,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_log8&nbsp;type&nbsp;zzprm_t008.<br />
+data: mno       type matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mbelgeno&nbsp;&nbsp;type&nbsp;mblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mbelgeno2&nbsp;type&nbsp;mblnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maliyil&nbsp;&nbsp;&nbsp;type&nbsp;gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maliyil2&nbsp;&nbsp;type&nbsp;gjahr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;btarihi&nbsp;&nbsp;&nbsp;type&nbsp;bldat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bturu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;blart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;mblpo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miktar&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;menge_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;olcubrm&nbsp;&nbsp;&nbsp;type&nbsp;meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hrkturu&nbsp;&nbsp;&nbsp;type&nbsp;kzbwa,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;urtyeri&nbsp;&nbsp;&nbsp;type&nbsp;werks_d.<br />
+<br />
+<br />
+<br />
+start-of-selection.<br />
+&nbsp;&nbsp;call&nbsp;screen&nbsp;1001.<br />
+<br />
+module user_command_1001 input.<br />
+case sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'BACK'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leave&nbsp;to&nbsp;screen&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;save_data.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&SAVE2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perform&nbsp;save_data2.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*perform&nbsp;ik_onay.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDCASE.<br />
+endmodule.<br />
+<br />
+<br />
+module status_1001 output.<br />
+loop at screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MBELGENO2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MALIYIL2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'KNO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MNO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MIKTAR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'OLCUBRM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'HRKTURU'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'URTYERI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;sy-ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&SAVE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MBELGENO2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mbelgeno2&nbsp;=&nbsp;mbelgeno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MALIYIL2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maliyil2&nbsp;=&nbsp;maliyil.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'KNO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MNO'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MIKTAR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'OLCUBRM'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'HRKTURU'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'URTYERI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+endmodule.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module&nbsp;&nbsp;USER_COMMAND_1001&nbsp;&nbsp;INPUT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;save_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form save_data .<br />
+&nbsp;&nbsp;gs_log7-mblnr&nbsp;=&nbsp;mbelgeno.<br />
+&nbsp;&nbsp;gs_log7-gjahr&nbsp;=&nbsp;maliyil.<br />
+&nbsp;&nbsp;gs_log7-bldat&nbsp;=&nbsp;btarihi.<br />
+&nbsp;&nbsp;gs_log7-blart&nbsp;=&nbsp;bturu.<br />
+&nbsp;&nbsp;insert&nbsp;zzprm_t007&nbsp;from&nbsp;gs_log7.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;if&nbsp;screen-name&nbsp;=&nbsp;'MBELGENO'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;screen-input&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;screen.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;commit&nbsp;work&nbsp;and&nbsp;wait.<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;save_data2<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form save_data2 .<br />
+&nbsp;&nbsp;gs_log8-mblnr&nbsp;=&nbsp;mbelgeno2.<br />
+&nbsp;&nbsp;gs_log8-gjahr&nbsp;=&nbsp;maliyil2.<br />
+&nbsp;&nbsp;gs_log8-mblpo&nbsp;=&nbsp;kno.<br />
+&nbsp;&nbsp;gs_log8-matnr&nbsp;=&nbsp;mno.<br />
+&nbsp;&nbsp;gs_log8-menge&nbsp;=&nbsp;miktar.<br />
+&nbsp;&nbsp;gs_log8-meins&nbsp;=&nbsp;olcubrm.<br />
+&nbsp;&nbsp;gs_log8-kzbwa&nbsp;=&nbsp;hrkturu.<br />
+&nbsp;&nbsp;gs_log8-werks&nbsp;=&nbsp;urtyeri.<br />
+&nbsp;&nbsp;insert&nbsp;zzprm_t008&nbsp;from&nbsp;gs_log8.<br />
+&nbsp;&nbsp;commit&nbsp;work&nbsp;and&nbsp;wait.<br />
+endform.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

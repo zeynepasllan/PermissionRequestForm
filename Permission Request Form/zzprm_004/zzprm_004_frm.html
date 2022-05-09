@@ -1,0 +1,563 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZZPRM_004_FRM</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZZPRM_004_FRM</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZZPRM_004_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form get_data .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;select<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;permformno<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;pno<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;status<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;perm_type<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;start_date<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;end_date<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;days_off<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;statement<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;zzprm_t003<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;gt_list.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;data&nbsp;lt_t001&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;zzprm_t001.<br />
+&nbsp;&nbsp;data&nbsp;ls_t001&nbsp;like&nbsp;line&nbsp;of&nbsp;lt_t001.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;*&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;table&nbsp;lt_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;in&nbsp;s_pno.<br />
+<br />
+<br />
+&nbsp;&nbsp;select&nbsp;*&nbsp;from&nbsp;zzprm_t003<br />
+&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;gt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;all&nbsp;entries&nbsp;in&nbsp;lt_t001<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;lt_t001-pno.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;data&nbsp;lt_dd07t&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;dd07t.<br />
+&nbsp;&nbsp;data&nbsp;ls_dd07t&nbsp;like&nbsp;line&nbsp;of&nbsp;lt_dd07t.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;*&nbsp;from&nbsp;dd07t&nbsp;into&nbsp;table&nbsp;lt_dd07t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;ddlanguage&nbsp;eq&nbsp;'T'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;domname&nbsp;like&nbsp;'ZZPRM%'.<br />
+<br />
+&nbsp;&nbsp;loop&nbsp;at&nbsp;gt_list&nbsp;into&nbsp;gs_list.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;lt_dd07t&nbsp;into&nbsp;ls_dd07t&nbsp;with&nbsp;key&nbsp;domname&nbsp;=&nbsp;'ZZPRM_PERMTYPE_DO'&nbsp;domvalue_l&nbsp;=&nbsp;gs_list-perm_type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_list-perm_type_text&nbsp;=&nbsp;ls_dd07t-ddtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;lt_dd07t&nbsp;into&nbsp;ls_dd07t&nbsp;with&nbsp;key&nbsp;domname&nbsp;=&nbsp;'ZZPRM_STATU_DO'&nbsp;domvalue_l&nbsp;=&nbsp;gs_list-status.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_list-status_text&nbsp;=&nbsp;ls_dd07t-ddtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pnsurname&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;gs_list-pnsurname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;gs_list-pno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;gt_list&nbsp;from&nbsp;gs_list.<br />
+&nbsp;&nbsp;endloop.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;set_fc<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_fc_sub using p_fieldname<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_seltext_s<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;p_seltext_m<br />
+&nbsp;&nbsp;p_seltext_l<br />
+&nbsp;&nbsp;p_key.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;p_hotspot.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;clear:&nbsp;gs_fieldcatalog.<br />
+&nbsp;&nbsp;gs_fieldcatalog-fieldname&nbsp;=&nbsp;p_fieldname.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_fieldcatalog-seltext_s&nbsp;=&nbsp;p_seltext_s.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_fieldcatalog-seltext_m&nbsp;=&nbsp;p_seltext_m.<br />
+&nbsp;&nbsp;gs_fieldcatalog-seltext_l&nbsp;=&nbsp;p_seltext_l.<br />
+&nbsp;&nbsp;gs_fieldcatalog-key&nbsp;=&nbsp;&nbsp;p_key.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_fieldcatalog-hotspot&nbsp;=&nbsp;&nbsp;p_hotspot.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;append&nbsp;gs_fieldcatalog&nbsp;to&nbsp;gt_fieldcatalog.<br />
+endform.<br />
+<br />
+<br />
+<br />
+form set_fc .<br />
+&nbsp;&nbsp;perform:&nbsp;set_fc_sub&nbsp;using&nbsp;'PERMFORMNO'&nbsp;'Ýzin&nbsp;Form&nbsp;No'&nbsp;'Ýzin&nbsp;Form&nbsp;Numarasý'&nbsp;abap_true,<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'PNO'&nbsp;'Pers&nbsp;No'&nbsp;'Personel&nbsp;Numarasý'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'PNSURNAME'&nbsp;'Ad&nbsp;Soyad'&nbsp;'Ad&nbsp;Soyad'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'STATUS'&nbsp;'Statü&nbsp;No'&nbsp;'Statü&nbsp;No'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'STATUS_TEXT'&nbsp;'Statü'&nbsp;'Statü'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'STATUS_TEXT1'&nbsp;'Statü'&nbsp;'Statü'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'PERM_TYPE'&nbsp;'Ýzin&nbsp;Türü'&nbsp;'Ýzin&nbsp;Türü'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'PERM_TYPE_TEXT'&nbsp;'Ýzin&nbsp;Türü'&nbsp;'Ýzin&nbsp;Açýklama'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'START_DATE'&nbsp;'Ýzin&nbsp;Baþ.&nbsp;T.'&nbsp;'Ýzin&nbsp;Baþlangýç&nbsp;Tarihi'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'END_DATE'&nbsp;'Ýzin&nbsp;Bit.&nbsp;T.'&nbsp;'Ýzin&nbsp;Bitiþ&nbsp;Tarihi'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'DAYS_OFF'&nbsp;'Ýzinli&nbsp;Gün&nbsp;S'&nbsp;'Ýzinli&nbsp;Gün&nbsp;Sayýsý'&nbsp;'',<br />
+&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;using&nbsp;'STATEMENT'&nbsp;'Açýklama'&nbsp;'Açýklama'&nbsp;''.<br />
+<br />
+<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;set_layout<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form set_layout .<br />
+&nbsp;&nbsp;gs_layout-window_titlebar&nbsp;=&nbsp;'Ýzin&nbsp;Raporu'.<br />
+&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;gs_layout-box_fieldname&nbsp;=&nbsp;'SELKZ'.<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_alv<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form display_alv .<br />
+<br />
+<br />
+&nbsp;&nbsp;call&nbsp;function&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INTERFACE_CHECK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BYPASSING_BUFFER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BUFFER_ACTIVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'PF_STATUS_SET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_END_OF_LIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_STRUCTURE_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BACKGROUND_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_TITLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_SETTINGS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcatalog<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCLUDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_SPECIAL_GROUPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_SORT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_FILTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_SEL_HIDE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_DEFAULT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SAVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_VARIANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EVENTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EVENT_EXIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_PRINT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_REPREP_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;40<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;100<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;20<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_TOP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_END&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_ALV_GRAPHICS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_HYPERLINK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_ADD_FIELDCAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCEPT_QINFO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IR_SALV_FULLSCREEN_ADAPTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O_PREVIOUS_SRAL_HANDLER&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E_EXIT_CAUSED_BY_CALLER&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ES_EXIT_CAUSED_BY_USER&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;tables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_list<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;endif.<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;set_fc_sub<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;PF_STATUS_SET<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+form pf_status_set using p_extab type slis_t_extab.<br />
+&nbsp;&nbsp;set&nbsp;pf-status&nbsp;'ZSTANDARD'.<br />
+endform.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;user_command<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+form user_command using p_ucomm type sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_selfield&nbsp;type&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;data:&nbsp;lv_mes&nbsp;type&nbsp;char200,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_ind&nbsp;type&nbsp;numc2.<br />
+&nbsp;&nbsp;case&nbsp;p_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&MSG'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;lt_dd07t&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;dd07t.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;ls_dd07t&nbsp;like&nbsp;line&nbsp;of&nbsp;lt_dd07t.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;*&nbsp;from&nbsp;dd07t&nbsp;into&nbsp;table&nbsp;lt_dd07t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;ddlanguage&nbsp;eq&nbsp;'T'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;domname&nbsp;like&nbsp;'ZZPRM%'.<br />
+<br />
+read table gt_list into gs_list index ps_selfield-tabindex.<br />
+if gs_list-status = '07'.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data:&nbsp;fm_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;rs38l_fnam,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;CHAR&nbsp;30&nbsp;0&nbsp;Name&nbsp;of&nbsp;Function&nbsp;Module<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_docparams&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;sfpdocparams,&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Structure&nbsp;&nbsp;SFPDOCPARAMS&nbsp;Short&nbsp;Description&nbsp;&nbsp;Form&nbsp;Parameters&nbsp;for&nbsp;Form&nbsp;Processing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_outputparams&nbsp;type&nbsp;sfpoutputparams,&nbsp;"&nbsp;Structure&nbsp;&nbsp;SFPOUTPUTPARAMS&nbsp;Short&nbsp;Description&nbsp;&nbsp;Form&nbsp;Processing&nbsp;Output&nbsp;Parameter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_permission&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_s001.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Table&nbsp;Type&nbsp;ZMARI_TBL&nbsp;MARI&nbsp;Table&nbsp;Tyoe<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Sets&nbsp;the&nbsp;output&nbsp;parameters&nbsp;and&nbsp;opens&nbsp;the&nbsp;spool&nbsp;job<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'FP_JOB_OPEN'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&&nbsp;Form&nbsp;Processing:&nbsp;Call&nbsp;Form<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ie_outputparams&nbsp;=&nbsp;fp_outputparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&----&nbsp;Get&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;generated&nbsp;function&nbsp;module<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'FP_FUNCTION_MODULE_NAME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&&nbsp;Form&nbsp;Processing&nbsp;Generation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZZPRM_0022'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_funcname&nbsp;=&nbsp;fm_name.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*--&nbsp;Fetch&nbsp;the&nbsp;Data&nbsp;and&nbsp;store&nbsp;it&nbsp;in&nbsp;the&nbsp;Internal&nbsp;Table<br />
+<br />
+***&nbsp;Language&nbsp;and&nbsp;country&nbsp;setting&nbsp;(here&nbsp;US&nbsp;as&nbsp;an&nbsp;example)<br />
+**fp_docparams-langu&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+**fp_docparams-country&nbsp;=&nbsp;'US'.<br />
+*&---&nbsp;Call&nbsp;the&nbsp;generated&nbsp;function&nbsp;module<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move-corresponding&nbsp;gs_list&nbsp;to&nbsp;ls_permission.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pdepartment&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_permission-pdepartment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;ls_permission-pno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pmail&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_permission-pmail<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;ls_permission-pno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;lt_dd07t&nbsp;into&nbsp;ls_dd07t&nbsp;with&nbsp;key&nbsp;domname&nbsp;=&nbsp;'ZZPRM_PERMTYPE_DO'&nbsp;domvalue_l&nbsp;=&nbsp;gs_list-perm_type.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_list-perm_type_text&nbsp;=&nbsp;ls_dd07t-ddtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data:&nbsp;lv_pypno&nbsp;type&nbsp;zzprm_t001-pypno.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pypno&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;lv_pypno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;gs_list-pno.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;ls_t0011&nbsp;type&nbsp;zzprm_t001.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_t0011<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;lv_pypno.<br />
+<br />
+select single pnsurname from zzprm_t001 into ls_permission-pnsurname2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;ls_t0011-pno.<br />
+<br />
+&nbsp;&nbsp;select&nbsp;single&nbsp;pdepartment&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_permission-pdepartment2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;ls_t0011-pno.<br />
+<br />
+data: lv_permformno type zzprm_t004-permformno.<br />
+select single permformno from zzprm_t004 into lv_permformno<br />
+&nbsp;&nbsp;where&nbsp;permformno&nbsp;eq&nbsp;gs_list-permformno.<br />
+<br />
+data ls_t00111 type zzprm_t004.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;from&nbsp;zzprm_t004&nbsp;into&nbsp;ls_t00111<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;permformno&nbsp;eq&nbsp;lv_permformno.<br />
+<br />
+select single date_ from zzprm_t004 into ls_permission-date_<br />
+where permformno eq ls_t00111-permformno and status = '07'.<br />
+<br />
+select single date_ from zzprm_t004 into ls_permission-date2_<br />
+where permformno eq ls_t00111-permformno and status = '03'.<br />
+   </div>
+   <div class="codeComment">
+*select&nbsp;single&nbsp;pmail&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_permission-<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data:&nbsp;lv_pypno&nbsp;type&nbsp;zzprm_t001-pypno.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pypno&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;lv_pypno<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;gs_list-pno.<br />
+*<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;ls_t0011&nbsp;type&nbsp;zzprm_t001.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;*&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;ls_t0011<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;lv_pypno.<br />
+<br />
+*&nbsp;select&nbsp;single&nbsp;pnsurname&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;gs_list-pnsurname2<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;ls_permission-pno.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;fm_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/1bcdwb/docparams&nbsp;=&nbsp;fp_docparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_permission&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_permission<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/1BCDWB/FORMOUTPUT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&lt;error&nbsp;handling&gt;<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+   </div>
+   <div class="codeComment">
+*&----&nbsp;Close&nbsp;the&nbsp;spool&nbsp;job<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;function&nbsp;'FP_JOB_CLOSE'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E_RESULT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elseif&nbsp;gs_list-status&nbsp;=&nbsp;'02'.<br />
+&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebiniz&nbsp;yönetici&nbsp;onayýnda!'&nbsp;type&nbsp;'E'.<br />
+   </div>
+   <div class="codeComment">
+*elseif&nbsp;gs_list-status&nbsp;=&nbsp;'03'.<br />
+*&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebiniz&nbsp;yönetici&nbsp;tarafýndan&nbsp;onaylandý!'&nbsp;type&nbsp;'E'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;elseif&nbsp;gs_list-status&nbsp;=&nbsp;'04'.<br />
+&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebiniz&nbsp;yönetici&nbsp;tarafýndan&nbsp;reddedildi!'&nbsp;type&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;elseif&nbsp;gs_list-status&nbsp;=&nbsp;'05'.<br />
+&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebiniz&nbsp;IK&nbsp;onayýnda!'&nbsp;type&nbsp;'E'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elseif&nbsp;gs_list-status&nbsp;=&nbsp;'06'.<br />
+&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebiniz&nbsp;IK&nbsp;tarafýndan&nbsp;reddedildi!'&nbsp;type&nbsp;'E'.<br />
+<br />
+ENDIF.<br />
+<br />
+&nbsp;&nbsp;when&nbsp;'&IPTL'.<br />
+<br />
+read table gt_list into gs_list index ps_selfield-tabindex.<br />
+if gs_list-status = '02' or gs_list-status = '04'.<br />
+DELETE FROM zzprm_t003 where permformno eq gs_list-permformno.<br />
+else.<br />
+&nbsp;&nbsp;message&nbsp;'Ýzin&nbsp;talebinizi&nbsp;iptal&nbsp;edemezsiniz!'&nbsp;type&nbsp;'E'.<br />
+endif.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;'&MSG2'.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;gt_list&nbsp;into&nbsp;gs_list&nbsp;where&nbsp;selkz&nbsp;eq&nbsp;'X'.<br />
+*&nbsp;&nbsp;gs_layout-window_titlebar&nbsp;=&nbsp;'Ýzin&nbsp;Raporu'.<br />
+*&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_layout-box_fieldname&nbsp;=&nbsp;'SELKZ'.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;lt_dd07t1&nbsp;type&nbsp;standard&nbsp;table&nbsp;of&nbsp;dd07t.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;ls_dd07t1&nbsp;like&nbsp;line&nbsp;of&nbsp;lt_dd07t.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;*&nbsp;from&nbsp;dd07t&nbsp;into&nbsp;table&nbsp;lt_dd07t1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;ddlanguage&nbsp;eq&nbsp;'T'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;domname&nbsp;like&nbsp;'ZZPRM%'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;gt_list&nbsp;into&nbsp;gs_list&nbsp;index&nbsp;ps_selfield-tabindex.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permformno<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;row_no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnsurname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hour_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;zzprm_t004&nbsp;into&nbsp;corresponding&nbsp;fields&nbsp;of&nbsp;table&nbsp;gt_t004<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;permformno&nbsp;eq&nbsp;gs_list-permformno.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loop&nbsp;at&nbsp;gt_t004&nbsp;into&nbsp;gs_t004.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read&nbsp;table&nbsp;lt_dd07t1&nbsp;into&nbsp;ls_dd07t1&nbsp;with&nbsp;key&nbsp;domname&nbsp;=&nbsp;'ZZPRM_STATU_DO'&nbsp;domvalue_l&nbsp;=&nbsp;gs_t004-status.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;sy-subrc&nbsp;eq&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_t004-status_text1&nbsp;=&nbsp;ls_dd07t1-ddtext.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;select&nbsp;single&nbsp;pnsurname&nbsp;from&nbsp;zzprm_t001&nbsp;into&nbsp;gs_t004-pnsurname<br />
+&nbsp;&nbsp;where&nbsp;pno&nbsp;eq&nbsp;gs_list-pno.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify&nbsp;gt_t004&nbsp;from&nbsp;gs_t004.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cl_salv_table=&gt;factory(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_salv_table&nbsp;&nbsp;&nbsp;=&nbsp;go_salv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_t004<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_salv-&gt;set_screen_popup(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_column&nbsp;=&nbsp;10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end_column&nbsp;&nbsp;&nbsp;=&nbsp;75<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_line&nbsp;&nbsp;&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;25<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_salv-&gt;display(&nbsp;).<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;endloop.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;endcase.<br />
+endform.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

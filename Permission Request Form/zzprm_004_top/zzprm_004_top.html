@@ -1,0 +1,75 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZZPRM_004_TOP</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZZPRM_004_TOP</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZZPRM_004_TOP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+type-pools slis .<br />
+tables zzprm_t003.<br />
+data: gs_001  type zzprm_t001,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_003&nbsp;type&nbsp;zzprm_t003.<br />
+data: it type table of zzprm_t003.<br />
+types: begin of gty_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selkz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;char1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permformno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_izinformno_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pno&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_pnum_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnsurname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_pnsurn_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_statu_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status_text&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;ddtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perm_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_permtype_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perm_type_text&nbsp;type&nbsp;ddtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_bastarih_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end_date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_bittarih_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;days_off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_izinligun_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_aciklama_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;gty_list.<br />
+<br />
+types: begin of gty_004,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;permformno&nbsp;&nbsp;type&nbsp;zzprm_izinformno_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;row_no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_rowno_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_statu_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status_text1&nbsp;type&nbsp;ddtext,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnsurname&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_pnsurn_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;date_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_date_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hour_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_hour_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement&nbsp;&nbsp;&nbsp;type&nbsp;zzprm_aciklama_de,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;of&nbsp;gty_004.<br />
+<br />
+<br />
+<br />
+data: gt_list type table of gty_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_list&nbsp;type&nbsp;gty_list.<br />
+<br />
+data: gt_fieldcatalog type slis_t_fieldcat_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcatalog&nbsp;type&nbsp;slis_fieldcat_alv.<br />
+<br />
+data: gs_layout type slis_layout_alv.<br />
+<br />
+data: gt_t004 type table of gty_004,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_t004&nbsp;type&nbsp;gty_004,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_salv&nbsp;type&nbsp;ref&nbsp;to&nbsp;cl_salv_table.<br />
+<br />
+select-options: s_pno for gs_001-pno.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

@@ -1,0 +1,133 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZZPRM_007</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZZPRM_007</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZZPRM_007<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+report zzprm_007.<br />
+data: fm_name         type rs38l_fnam,      " CHAR 30 0 Name of Function Module<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_docparams&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;sfpdocparams,&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Structure&nbsp;&nbsp;SFPDOCPARAMS&nbsp;Short&nbsp;Description&nbsp;&nbsp;Form&nbsp;Parameters&nbsp;for&nbsp;Form&nbsp;Processing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fp_outputparams&nbsp;type&nbsp;sfpoutputparams,&nbsp;"&nbsp;Structure&nbsp;&nbsp;SFPOUTPUTPARAMS&nbsp;Short&nbsp;Description&nbsp;&nbsp;Form&nbsp;Processing&nbsp;Output&nbsp;Parameter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_mari&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;table&nbsp;of&nbsp;&nbsp;zzprm_t003.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;Table&nbsp;Type&nbsp;ZMARI_TBL&nbsp;MARI&nbsp;Table&nbsp;Tyoe<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Sets&nbsp;the&nbsp;output&nbsp;parameters&nbsp;and&nbsp;opens&nbsp;the&nbsp;spool&nbsp;job<br />
+   </div>
+   <div class="code">
+call function 'FP_JOB_OPEN'                   "& Form Processing: Call Form<br />
+&nbsp;&nbsp;changing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ie_outputparams&nbsp;=&nbsp;fp_outputparams<br />
+&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cancel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+if sy-subrc &lt;&gt; 0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;error&nbsp;handling&gt;<br />
+   </div>
+   <div class="code">
+endif.<br />
+   </div>
+   <div class="codeComment">
+*&----&nbsp;Get&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;generated&nbsp;function&nbsp;module<br />
+   </div>
+   <div class="code">
+call function 'FP_FUNCTION_MODULE_NAME'           "& Form Processing Generation<br />
+&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZZPRM_0022'<br />
+&nbsp;&nbsp;importing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;e_funcname&nbsp;=&nbsp;fm_name.<br />
+if sy-subrc &lt;&gt; 0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&lt;error&nbsp;handling&gt;<br />
+   </div>
+   <div class="code">
+endif.<br />
+   </div>
+   <div class="codeComment">
+*--&nbsp;Fetch&nbsp;the&nbsp;Data&nbsp;and&nbsp;store&nbsp;it&nbsp;in&nbsp;the&nbsp;Internal&nbsp;Table<br />
+   </div>
+   <div class="code">
+select * from zzprm_t003 into corresponding fields of table it_mari up to 15 rows.<br />
+   </div>
+   <div class="codeComment">
+***&nbsp;Language&nbsp;and&nbsp;country&nbsp;setting&nbsp;(here&nbsp;US&nbsp;as&nbsp;an&nbsp;example)<br />
+**fp_docparams-langu&nbsp;&nbsp;&nbsp;=&nbsp;'E'.<br />
+**fp_docparams-country&nbsp;=&nbsp;'US'.<br />
+*&---&nbsp;Call&nbsp;the&nbsp;generated&nbsp;function&nbsp;module<br />
+   </div>
+   <div class="code">
+call function fm_name<br />
+&nbsp;&nbsp;exporting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/1bcdwb/docparams&nbsp;=&nbsp;fp_docparams<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"ls_permission&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;it_mari<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;/1BCDWB/FORMOUTPUT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+if sy-subrc &lt;&gt; 0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&lt;error&nbsp;handling&gt;<br />
+   </div>
+   <div class="code">
+endif.<br />
+   </div>
+   <div class="codeComment">
+*&----&nbsp;Close&nbsp;the&nbsp;spool&nbsp;job<br />
+   </div>
+   <div class="code">
+call function 'FP_JOB_CLOSE'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E_RESULT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;exceptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage_error&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;system_error&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;internal_error&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;others&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+if sy-subrc &lt;&gt; 0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;error&nbsp;handling&gt;<br />
+   </div>
+   <div class="code">
+endif.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

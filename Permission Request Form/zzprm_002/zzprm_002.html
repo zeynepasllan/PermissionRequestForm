@@ -1,0 +1,76 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZZPRM_002</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZZPRM_002</h2>
+<h3> Description: </h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZZPRM_002<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT ZZPRM_002.<br />
+<br />
+&nbsp;&nbsp;TABLES&nbsp;sscrfields.<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------*<br />
+*Selection-Screen<br />
+*--------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSHBUTTON&nbsp;/2(40)&nbsp;button1&nbsp;USER-COMMAND&nbsp;but1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSHBUTTON&nbsp;/2(40)&nbsp;button2&nbsp;USER-COMMAND&nbsp;but2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSHBUTTON&nbsp;/2(40)&nbsp;button3&nbsp;USER-COMMAND&nbsp;but3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSHBUTTON&nbsp;/2(40)&nbsp;button4&nbsp;USER-COMMAND&nbsp;but4.<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------*<br />
+*At&nbsp;Selection-Screen<br />
+*--------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+AT SELECTION-SCREEN.<br />
+&nbsp;&nbsp;CASE&nbsp;sscrfields.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;TRANSACTION&nbsp;'ZZPRM_IZINTALEBI'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;TRANSACTION&nbsp;'ZZPRM_IZINRAPORU'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;TRANSACTION&nbsp;'ZZPRM_YONETICIRAPORU'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BUT4'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;TRANSACTION&nbsp;'ZZPRM_IKRAPORU'.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+   </div>
+   <div class="codeComment">
+*--------------------------------------------------------------*<br />
+*Initialization<br />
+*--------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+INITIALIZATION.<br />
+&nbsp;&nbsp;button1&nbsp;=&nbsp;'Ýzin&nbsp;Talebi'.<br />
+&nbsp;&nbsp;button2&nbsp;=&nbsp;'Ýzin&nbsp;Raporu'.<br />
+&nbsp;&nbsp;button3&nbsp;=&nbsp;'Yönetici&nbsp;Raporu'.<br />
+&nbsp;&nbsp;button4&nbsp;=&nbsp;'IK&nbsp;Raporu'.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
